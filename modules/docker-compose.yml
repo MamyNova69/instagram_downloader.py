@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  chrome:
+    image: "selenium/standalone-chrome"
+    container_name: "mon-navigateur"
+    # ports:
+    #   - "5900:5900"
+    #   - "4444:4444"
+    #   - "7900:7900"  # Disable in production; you can see your browser at http://localhost:7900/?autoconnect=1&resize=scale&password=secret
+    privileged: true
+    volumes:
+      - /dev/shm:/dev/shm
+    restart: unless-stopped
+    networks:
+      selenium_network:
+        ipv4_address: 172.25.0.5
+
+networks:
+  selenium_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+# docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mon-navigateur
