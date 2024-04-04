@@ -19,10 +19,11 @@ instagram_cookie_url =".instagram.com"
 profil_page_link = "https://www.instagram.com/natgeo/"
 
 img_pattern = r'src="(https:\/\/scontent.cdninstagram.com\/v\/.*?)"'
+count_image = 0
+IMG_URLS = []
 
 
 def import_cookie() :
-
     cookies = firefox()
     filtered_cookies = [cookie for cookie in cookies if instagram_cookie_url in cookie.domain]
     chrome_cookies = [{
@@ -35,11 +36,30 @@ def import_cookie() :
                     'value': cookie.value
                     }
                     for cookie in filtered_cookies]
-    
-
-    # print(chrome_cookies)
-    
     return chrome_cookies
+
+
+# Give a list to this function and it will download the images if they are not already downloaded
+def download_images(liste):
+    global count_image
+    count_image += 1
+    folder_path = "images"
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    for each in liste:
+        if each not in IMG_URLS:
+            IMG_URLS.append(each)
+            response = requests.get(each)
+            time.sleep(1) # let's see if this helps
+            if response.status_code == 200:
+                count_image += 1
+                with open(f"{folder_path}/image_{count_image}.jpg", "wb") as f:
+                    f.write(response.content)
+                    print(f"Image {count_image} saved successfully")
+            else:
+                print(f"Failed to download image {count_image}")
+
 
 
 if __name__ == "__main__":
@@ -52,20 +72,16 @@ if __name__ == "__main__":
 
     for cookie in chrome_cookies:
         nav.driver.add_cookie(cookie)
-
     nav.get_url(instagram_url)
     nav.driver.save_screenshot("instagram.png")
-
     nav.get_url(profil_page_link)
     time.sleep(2)
     nav.driver.save_screenshot("instagram.png")
 
-
-
     html = nav.driver.page_source
     img_urls = re.findall(img_pattern, html)
     img_urls = [url.replace('&amp;', '&') for url in img_urls]
-    print(len(img_urls))
+    # print(len(img_urls))
 
 
     html = nav.driver.find_element(By.TAG_NAME, 'html')
@@ -73,18 +89,18 @@ if __name__ == "__main__":
 
 
     time.sleep(2)
-    nav.driver.save_screenshot("instagram.png")
+    # nav.driver.save_screenshot("instagram.png")
 
 
 
     html = nav.driver.page_source
     img_urls = re.findall(img_pattern, html)
     img_urls = [url.replace('&amp;', '&') for url in img_urls]
-    print(len(img_urls))
 
+    # download_images(img_urls)
 
     publications = nav.driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]')
-    print(len(publications))
+    # print(len(publications))
 
 
     # normalement une seule balise, mais par souci de generalité on fait une boucle
@@ -94,45 +110,49 @@ if __name__ == "__main__":
         for link in links:
             LINKS.append(link)
 
-        
-
-
     print(len(LINKS))
 
-
-    i = 0
     for link in LINKS:
-        i=i+1
+        print(link.get_attribute('href'))
+
+
+
+    for link in LINKS:
         time.sleep(2)
         link.click()
         time.sleep(2)
-        nav.driver.save_screenshot(f"instagram{i}.png")
-        htlm = nav.wait.until(EC.presence_of_element_located((By.TAG_NAME, 'html')))
-        html = nav.driver.find_element(By.TAG_NAME, 'html')
-        html.send_keys(Keys.ESCAPE)
-        time.sleep(2)
+        box = nav.wait.until(EC.presence_of_element_located((By.XPATH, '//img[@style="object-fit: cover;"]')))
+        time.sleep(1)
+
+        html = nav.driver.page_source
+        nouvelles_images = re.findall(img_pattern, html)
+        nouvelles_images = [url.replace('&amp;', '&') for url in nouvelles_images]
+        # download_images(nouvelles_images)
+
+
+
+        suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
+        print(len(suivant))
+
+        # if len(suivant) > 1:
+        #     suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
+
+        #     suivant[1].click()
+        #     time.sleep(1)
+        #     box = nav.wait.until(EC.presence_of_element_located((By.XPATH, '//img[@style="object-fit: cover;"]')))
+        #     time.sleep(1)
+        # else:
+        #     print("pas d'image suivante")
+
+        htlm = nav.driver.find_element(By.TAG_NAME, 'html')
+        htlm.send_keys(Keys.ESCAPE)
+        time.sleep(1)
 
 
 
 
-    # # Create a folder to save the images
-
-    # folder_path = "images"
-    # if not os.path.exists(folder_path):
-    #     os.makedirs(folder_path)
-
-    # # Save all image links with requests
-    # for i, img_url in enumerate(img_urls):
-    #     response = requests.get(img_url)
-    #     if response.status_code == 200:
-    #         with open(f"{folder_path}/image_{i}.jpg", "wb") as f:
-    #             f.write(response.content)
-    #             print(f"Image {i} saved successfully")
-    #     else:
-    #         print(f"Failed to download image {i}")
 
 
-    # print(links)
 
 
 
