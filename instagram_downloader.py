@@ -72,6 +72,40 @@ def download_images():
             else:
                 print(f"Failed to download image {count_image}")
 
+def navigate(x):
+    # x is the number of arrows to click to go to the next page
+    time.sleep(1)
+    link.click()
+    box = nav.wait.until(EC.presence_of_element_located((By.XPATH, '//img[@style="object-fit: cover;"]')))
+    download_images()
+    suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
+    count_button = len(suivant)
+
+    #adjust the number the number of arrows if the have a storries in profil that go to a next page
+    if count_button > x:
+        while count_button > x:
+            suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
+
+            try :
+                suivant[x].click()
+                download_images()
+            except :
+                # print("pas d'image suivante")
+                break
+            time.sleep(0.5)
+            count_button = len(suivant)
+
+
+
+            # print(count_button)
+
+    else:
+        pass
+        # print("pas d'image suivante")
+
+    htlm = nav.driver.find_element(By.TAG_NAME, 'html')
+    htlm.send_keys(Keys.ESCAPE)
+
 
 
 if __name__ == "__main__":
@@ -85,10 +119,10 @@ if __name__ == "__main__":
     for cookie in chrome_cookies:
         nav.driver.add_cookie(cookie)
     nav.get_url(instagram_url)
-    nav.driver.save_screenshot("instagram.png")
+
     nav.get_url(profil_page_link)
     time.sleep(1)
-    nav.driver.save_screenshot("instagram.png")
+    # nav.driver.save_screenshot("instagram.png")
 
 
     img_urls = find_links_of_images()
@@ -105,7 +139,6 @@ if __name__ == "__main__":
 
     # nav.driver.save_screenshot("instagram.png")
 
-
     download_images()
 
     publications = nav.driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]')
@@ -119,44 +152,19 @@ if __name__ == "__main__":
         for link in links:
             LINKS.append(link)
 
-    # print(len(LINKS))
-
-    # for link in LINKS:
-    #     print(link.get_attribute('href'))
-
-
 
     for link in LINKS:
-        time.sleep(1)
-        link.click()
-        box = nav.wait.until(EC.presence_of_element_located((By.XPATH, '//img[@style="object-fit: cover;"]')))
-
-        download_images()
 
         suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
-
-        download_images()
-
         count_button = len(suivant)
-        if count_button > 1:
-            while count_button > 1:
-                suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
-                try :
-                    suivant[1].click()
-                    download_images()
-                except :
-                    # print("pas d'image suivante")
-                    break
-                time.sleep(0.5)
-                count_button = len(suivant)
-                # print(count_button)
 
-        else:
-            pass
-            # print("pas d'image suivante")
+        if count_button == 0:
+            navigate(0)
+        elif count_button == 1:
+            navigate(1)
 
-        htlm = nav.driver.find_element(By.TAG_NAME, 'html')
-        htlm.send_keys(Keys.ESCAPE)
+
+
 
 
 
