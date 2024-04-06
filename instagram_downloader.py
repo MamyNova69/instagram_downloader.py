@@ -129,20 +129,24 @@ if __name__ == "__main__":
         nouvelles_images = [url.replace('&amp;', '&') for url in nouvelles_images]
         # download_images(nouvelles_images)
 
-
-
         suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
         print(len(suivant))
 
-        # if len(suivant) > 1:
-        #     suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
+        count_button = len(suivant)
+        if count_button > 1:
+            while count_button > 1:
+                suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
+                try :
+                    suivant[1].click()
+                except :
+                    print("pas d'image suivante")
+                    break
+                time.sleep(1)
+                count_button = len(suivant)
+                print(count_button)
 
-        #     suivant[1].click()
-        #     time.sleep(1)
-        #     box = nav.wait.until(EC.presence_of_element_located((By.XPATH, '//img[@style="object-fit: cover;"]')))
-        #     time.sleep(1)
-        # else:
-        #     print("pas d'image suivante")
+        else:
+            print("pas d'image suivante")
 
         htlm = nav.driver.find_element(By.TAG_NAME, 'html')
         htlm.send_keys(Keys.ESCAPE)
