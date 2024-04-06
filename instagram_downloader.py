@@ -72,7 +72,8 @@ def download_images():
             else:
                 print(f"Failed to download image {count_image}")
 
-def navigate(x):
+def navigate(x, link):
+    # navigate and download new images
     # x is the number of arrows to click to go to the next page
     time.sleep(1)
     link.click()
@@ -85,7 +86,6 @@ def navigate(x):
     if count_button > x:
         while count_button > x:
             suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
-
             try :
                 suivant[x].click()
                 download_images()
@@ -94,11 +94,6 @@ def navigate(x):
                 break
             time.sleep(0.5)
             count_button = len(suivant)
-
-
-
-            # print(count_button)
-
     else:
         pass
         # print("pas d'image suivante")
@@ -110,8 +105,6 @@ def navigate(x):
 
 if __name__ == "__main__":
 
-
-    #open a session with chrome and login with your cookies
     chrome_cookies = import_cookie()
     nav.ouvrir_session_chrome()
     nav.get_url(instagram_url)
@@ -122,46 +115,49 @@ if __name__ == "__main__":
 
     nav.get_url(profil_page_link)
     time.sleep(1)
-    # nav.driver.save_screenshot("instagram.png")
-
 
     img_urls = find_links_of_images()
-
-    html = nav.driver.find_element(By.TAG_NAME, 'html')
-    html.send_keys(Keys.END)
-    
-    x = len(find_links_of_images())
-    while x < len(img_urls):
-        time.sleep(0.1)
-        x = len(find_links_of_images())
-
-
-
-    # nav.driver.save_screenshot("instagram.png")
-
     download_images()
 
-    publications = nav.driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]')
-    # print(len(publications))
 
-
-    # normalement une seule balise, mais par souci de generalité on fait une boucle
     LINKS = []
-    for publication in publications:
-        links = publication.find_elements(By.TAG_NAME, 'a')
-        for link in links:
-            LINKS.append(link)
+    while True:
+        NEW_LINKS = []
+
+        publications = nav.driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]')
+        
+        for publication in publications:
+            links = publication.find_elements(By.TAG_NAME, 'a')
+            for link in links:
+                if link not in LINKS:
+                    LINKS.append(link)
+                    NEW_LINKS.append(link)
+            
+        for link in NEW_LINKS:
+            suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
+            count_button = len(suivant)
+            if count_button == 0:
+                navigate(0, link)
+            elif count_button == 1:
+                navigate(1, link)
+        
+        img_urls = find_links_of_images()
+        download_images()
 
 
-    for link in LINKS:
+        #scroll to the end of the page to load all the images
+        html = nav.driver.find_element(By.TAG_NAME, 'html')
+        html.send_keys(Keys.END)
+        time.sleep(2)
+    
 
-        suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
-        count_button = len(suivant)
 
-        if count_button == 0:
-            navigate(0)
-        elif count_button == 1:
-            navigate(1)
+
+
+
+
+
+
 
 
 
