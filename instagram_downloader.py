@@ -39,24 +39,36 @@ def import_cookie() :
     return chrome_cookies
 
 
+def find_links_of_images():
+    html = nav.driver.page_source
+    links = re.findall(img_pattern, html)
+    links = [url.replace('&amp;', '&') for url in links]
+    # print(len(img_urls))
+    return links
+    
+
+
 # Give a list to this function and it will download the images if they are not already downloaded
-def download_images(liste):
+def download_images():
     global count_image
     count_image += 1
     folder_path = "images"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
+    
+    img_urls = find_links_of_images()
+    # print(f"il y a {len(img_urls)} images sur la page")
 
-    for each in liste:
+    for each in img_urls:
         if each not in IMG_URLS:
             IMG_URLS.append(each)
             response = requests.get(each)
-            time.sleep(1) # let's see if this helps
+            time.sleep(0.1) # let's see if this helps
             if response.status_code == 200:
                 count_image += 1
                 with open(f"{folder_path}/image_{count_image}.jpg", "wb") as f:
                     f.write(response.content)
-                    print(f"Image {count_image} saved successfully")
+                    # print(f"Image {count_image} saved successfully")
             else:
                 print(f"Failed to download image {count_image}")
 
@@ -75,29 +87,26 @@ if __name__ == "__main__":
     nav.get_url(instagram_url)
     nav.driver.save_screenshot("instagram.png")
     nav.get_url(profil_page_link)
-    time.sleep(2)
+    time.sleep(1)
     nav.driver.save_screenshot("instagram.png")
 
-    html = nav.driver.page_source
-    img_urls = re.findall(img_pattern, html)
-    img_urls = [url.replace('&amp;', '&') for url in img_urls]
-    # print(len(img_urls))
 
+    img_urls = find_links_of_images()
 
     html = nav.driver.find_element(By.TAG_NAME, 'html')
     html.send_keys(Keys.END)
+    
+    x = len(find_links_of_images())
+    while x < len(img_urls):
+        time.sleep(0.1)
+        x = len(find_links_of_images())
 
 
-    time.sleep(2)
+
     # nav.driver.save_screenshot("instagram.png")
 
 
-
-    html = nav.driver.page_source
-    img_urls = re.findall(img_pattern, html)
-    img_urls = [url.replace('&amp;', '&') for url in img_urls]
-
-    # download_images(img_urls)
+    download_images()
 
     publications = nav.driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]')
     # print(len(publications))
@@ -110,27 +119,23 @@ if __name__ == "__main__":
         for link in links:
             LINKS.append(link)
 
-    print(len(LINKS))
+    # print(len(LINKS))
+
+    # for link in LINKS:
+    #     print(link.get_attribute('href'))
+
+
 
     for link in LINKS:
-        print(link.get_attribute('href'))
-
-
-
-    for link in LINKS:
-        time.sleep(2)
-        link.click()
-        time.sleep(2)
-        box = nav.wait.until(EC.presence_of_element_located((By.XPATH, '//img[@style="object-fit: cover;"]')))
         time.sleep(1)
+        link.click()
+        box = nav.wait.until(EC.presence_of_element_located((By.XPATH, '//img[@style="object-fit: cover;"]')))
 
-        html = nav.driver.page_source
-        nouvelles_images = re.findall(img_pattern, html)
-        nouvelles_images = [url.replace('&amp;', '&') for url in nouvelles_images]
-        # download_images(nouvelles_images)
+        download_images()
 
         suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
-        print(len(suivant))
+
+        download_images()
 
         count_button = len(suivant)
         if count_button > 1:
@@ -138,19 +143,21 @@ if __name__ == "__main__":
                 suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
                 try :
                     suivant[1].click()
+                    download_images()
                 except :
-                    print("pas d'image suivante")
+                    # print("pas d'image suivante")
                     break
-                time.sleep(1)
+                time.sleep(0.5)
                 count_button = len(suivant)
-                print(count_button)
+                # print(count_button)
 
         else:
-            print("pas d'image suivante")
+            pass
+            # print("pas d'image suivante")
 
         htlm = nav.driver.find_element(By.TAG_NAME, 'html')
         htlm.send_keys(Keys.ESCAPE)
-        time.sleep(1)
+
 
 
 
