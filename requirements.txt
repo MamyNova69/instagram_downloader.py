@@ -1,0 +1,5 @@
+requests
+selenium
+browser_cookie3
+
+
