@@ -19,7 +19,7 @@ instagram_cookie_url =".instagram.com"
 profil_page_link = "https://www.instagram.com/natgeo/"
 
 img_pattern = r'src="(https:\/\/scontent.cdninstagram.com\/v\/.*?)"'
-count_image = 0
+count_image = -1
 IMG_URLS = []
 
 
@@ -120,55 +120,37 @@ if __name__ == "__main__":
     download_images()
 
 
-    LINKS = []
+    LINKS = {}
+    # make it a dictionary with the href as key and link as value
+     
     while True:
-        NEW_LINKS = []
+        NEW_LINKS = {}
 
-        publications = nav.driver.find_elements(By.XPATH, '//div[@style="display: flex; flex-direction: column; padding-bottom: 0px; padding-top: 0px; position: relative;"]')
+        xpath = "//div[contains(@style, 'display: flex; flex-direction: column;')]"
+        publications = nav.driver.find_elements(By.XPATH, xpath)
         
         for publication in publications:
             links = publication.find_elements(By.TAG_NAME, 'a')
+
             for link in links:
-                if link not in LINKS:
-                    LINKS.append(link)
-                    NEW_LINKS.append(link)
-            
-        for link in NEW_LINKS:
+                if link.get_attribute('href') not in LINKS:
+                    LINKS[link.get_attribute('href')] = link
+                    NEW_LINKS[link.get_attribute('href')] = link
+        
+        for link in NEW_LINKS.items() : # try with LINKS and NEW_LINKS
             suivant = nav.driver.find_elements(By.XPATH, '//button[@aria-label="Suivant"]')
             count_button = len(suivant)
             if count_button == 0:
-                navigate(0, link)
+                navigate(0, link[1])
             elif count_button == 1:
-                navigate(1, link)
+                navigate(1, link[1])
         
         img_urls = find_links_of_images()
         download_images()
 
-
         #scroll to the end of the page to load all the images
         html = nav.driver.find_element(By.TAG_NAME, 'html')
         html.send_keys(Keys.END)
-        time.sleep(2)
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        time.sleep(3)
 
 
