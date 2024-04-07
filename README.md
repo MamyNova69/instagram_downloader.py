@@ -46,3 +46,5 @@ run the script with this command or simply double click on it
 it will ask you for the adresse of a profil and then start to downloads images from it
 
 example : 
+
+![Capture d’écran 2024-04-07 134108](https://github.com/MamyNova69/instagram_downloader.py/assets/34945270/7ee5669d-d6d7-4ac0-9062-fa5f9975b3ce)
