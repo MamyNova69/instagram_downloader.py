@@ -3,6 +3,7 @@
 
 This script works with windows and python 3.10
 It should works also with mac computer and linux but I didn't tested it.
+It is far from perfect but serve as a POC
 
 ### Python Installation
 
