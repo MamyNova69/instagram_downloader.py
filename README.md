@@ -35,3 +35,14 @@ For information it will install the following package
 | browser_cookie3 | Loads cookies used by your web browser into a cookiejar object | https://github.com/borisbabic/browser_cookie3 |
 
 
+## Utilisation
+
+run the script with this command or simply double click on it
+
+```bash
+  python instagram_downloader.py
+```
+
+it will ask you for the adresse of a profil and then start to downloads images from it
+
+example : 
