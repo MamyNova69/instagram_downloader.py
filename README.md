@@ -6,11 +6,13 @@ It should works also with mac computer and linux but I didn't tested it.
 
 ### Python Installation
 
-to install python visite https://www.python.org/
+To install python visite https://www.python.org/
 
 ### Install modules
 
-go to the folder you have saved these files and run a command line 
+Go to the folder you have saved these files and run a command line.
+
+With windows you can open a terminal directly in the folder by typing cmd in the adresse bar
 
 ```bash
   pip install -r requirements.txt
