@@ -1,10 +1,7 @@
 import requests
 import modules.navigateur_local_chrome as nav
-# change to this, if you are using a remote server
-# import modules.navigateur as nav
 from browser_cookie3 import firefox
 import time
-from bs4 import BeautifulSoup
 import re
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -12,11 +9,13 @@ import os
 from selenium.webdriver.support import expected_conditions as EC
 
 
+profil_page_link = input("Enter the profile page link: ")
+num_pictures = int(input("Enter the number of pictures you want to download: "))
+
 
 instagram_url = "https://www.instagram.com/"
 instagram_cookie_url =".instagram.com"
 
-profil_page_link = "https://www.instagram.com/natgeo/"
 
 img_pattern = r'src="(https:\/\/scontent.cdninstagram.com\/v\/.*?)"'
 count_image = -1
@@ -68,7 +67,7 @@ def download_images():
                 count_image += 1
                 with open(f"{folder_path}/image_{count_image}.jpg", "wb") as f:
                     f.write(response.content)
-                    # print(f"Image {count_image} saved successfully")
+                    print(f"Image {count_image} saved successfully")
             else:
                 print(f"Failed to download image {count_image}")
 
@@ -105,6 +104,7 @@ def navigate(x, link):
 
 if __name__ == "__main__":
 
+
     chrome_cookies = import_cookie()
     nav.ouvrir_session_chrome()
     nav.get_url(instagram_url)
@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     LINKS = {}
     # make it a dictionary with the href as key and link as value
-     
+    
     while True:
         NEW_LINKS = {}
 
@@ -152,5 +152,7 @@ if __name__ == "__main__":
         html = nav.driver.find_element(By.TAG_NAME, 'html')
         html.send_keys(Keys.END)
         time.sleep(3)
+        
+
 
 
