@@ -10,6 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 profil_page_link = input("Enter the profile page link: ")
+
+# next input is not working yet
 num_pictures = int(input("Enter the number of pictures you want to download: "))
 date = time.strftime("%Y-%m-%d %H-%M-%S")
 
