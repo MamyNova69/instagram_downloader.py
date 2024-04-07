@@ -12,6 +12,10 @@ To install python visite https://www.python.org/
 
 Go to the folder you have saved these files and run a command line.
 
+```bash
+  pip install -r requirements.txt
+```
+
 With windows you can open a terminal directly in the folder by typing cmd in the adresse bar
 
 ![Capture d’écran 2024-04-07 132929](https://github.com/MamyNova69/instagram_downloader.py/assets/34945270/71aae3a6-9aa7-4f65-b291-6a0b0cc56883)
@@ -19,9 +23,7 @@ With windows you can open a terminal directly in the folder by typing cmd in the
 ![Capture d’écran 2024-04-07 133109](https://github.com/MamyNova69/instagram_downloader.py/assets/34945270/1ee1f37b-b0b8-4bed-a298-72ce33f45aee)
 
 
-```bash
-  pip install -r requirements.txt
-```
+
 
 For information it will install the following package 
 
