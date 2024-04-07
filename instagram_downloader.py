@@ -19,7 +19,7 @@ instagram_cookie_url =".instagram.com"
 
 
 img_pattern = r'src="(https:\/\/scontent.cdninstagram.com\/v\/.*?)"'
-count_image = -1
+count_image = 0
 IMG_URLS = []
 
 
@@ -50,8 +50,6 @@ def find_links_of_images():
 
 # Give a list to this function and it will download the images if they are not already downloaded
 def download_images():
-    global count_image
-    count_image += 1
     folder_path = "images"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -70,7 +68,7 @@ def download_images():
                     f.write(response.content)
                     print(f"Image {count_image} saved successfully")
             else:
-                print(f"Failed to download image {count_image}")
+                print(f"Failed to download image")
 
 def navigate(x, link):
     # navigate and download new images
