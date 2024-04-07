@@ -65,6 +65,7 @@ def download_images():
             response = requests.get(each)
             time.sleep(0.1) # let's see if this helps
             if response.status_code == 200:
+                global count_image
                 count_image += 1
                 with open(f"{folder_path}/image_{count_image}.jpg", "wb") as f:
                     f.write(response.content)
