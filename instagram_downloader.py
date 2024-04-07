@@ -156,7 +156,7 @@ if __name__ == "__main__":
         #scroll to the end of the page to load all the images
         html = nav.driver.find_element(By.TAG_NAME, 'html')
         html.send_keys(Keys.END)
-        time.sleep(3)
+        time.sleep(5) # find another solution to wait for the page to load
         
 
 
