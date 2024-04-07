@@ -11,6 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 profil_page_link = input("Enter the profile page link: ")
 num_pictures = int(input("Enter the number of pictures you want to download: "))
+date = time.strftime("%Y-%m-%d %H-%M-%S")
 
 
 instagram_url = "https://www.instagram.com/"
@@ -124,6 +125,9 @@ if __name__ == "__main__":
     # make it a dictionary with the href as key and link as value
     
     while True:
+
+        # need to rethink this as links can contain multiple images
+        # actually ok if I navigate and download after each publications links
         NEW_LINKS = {}
 
         xpath = "//div[contains(@style, 'display: flex; flex-direction: column;')]"
