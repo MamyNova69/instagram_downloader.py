@@ -125,7 +125,7 @@ if __name__ == "__main__":
     LINKS = {}
     # make it a dictionary with the href as key and link as value
     
-    while True:
+    while count_image < num_pictures:
 
         # need to rethink this as links can contain multiple images
         # actually ok if I navigate and download after each publications links
@@ -158,6 +158,8 @@ if __name__ == "__main__":
         html.send_keys(Keys.END)
         time.sleep(5) # find another solution to wait for the page to load
         
-
+    print(f"Downloaded {count_image} images")
+    nav.driver.quit()
+    print("End of the program")
 
 
