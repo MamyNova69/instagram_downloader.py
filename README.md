@@ -37,7 +37,10 @@ For information it will install the following package
 
 ## Utilisation
 
-run the script with this command or simply double click on it
+you need to open and connect your instagram account in firefox. 
+
+then, run the script with this command or simply double click on it.
+It will read and use your cookie to connect and download the pictures.
 
 ```bash
   python instagram_downloader.py
@@ -48,3 +51,4 @@ it will ask you for the adresse of a profil and then start to downloads images f
 example : 
 
 ![Capture d’écran 2024-04-07 134108](https://github.com/MamyNova69/instagram_downloader.py/assets/34945270/7ee5669d-d6d7-4ac0-9062-fa5f9975b3ce)
+
