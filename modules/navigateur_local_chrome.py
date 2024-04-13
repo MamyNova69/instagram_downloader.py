@@ -21,6 +21,7 @@ def ouvrir_session_chrome():
 	chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 	chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"]) 
 	chrome_options.add_experimental_option("useAutomationExtension", False)
+	chrome_options.add_argument("window-size=1920,1080")
 	path_to_extension = r"modules/ublock/uBlock-Origin.crx"
 	chrome_options.add_extension(path_to_extension)
 	global driver
