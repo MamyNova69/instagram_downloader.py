@@ -10,6 +10,11 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 profil_page_link = input("Enter the profile page link: ")
+profile_name = re.search(r'instagram\.com/([^/]+)/?$', profil_page_link).group(1)
+
+
+clean_profile_name = re.sub(r'[^a-zA-Z0-9_]', '', profile_name)
+print(clean_profile_name)
 
 # next input is not working yet
 num_pictures = int(input("Enter the number of pictures you want to download: "))
@@ -67,7 +72,7 @@ def download_images():
             if response.status_code == 200:
                 global count_image
                 count_image += 1
-                with open(f"{folder_path}/image_{count_image}.jpg", "wb") as f:
+                with open(f"{folder_path}/{clean_profile_name}_{count_image}.jpg", "wb") as f:
                     f.write(response.content)
                     print(f"Image {count_image} saved successfully")
             else:
