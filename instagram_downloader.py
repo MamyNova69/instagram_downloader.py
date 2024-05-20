@@ -57,7 +57,7 @@ def find_links_of_images():
 
 # Give a list to this function and it will download the images if they are not already downloaded
 def download_images():
-    folder_path = "images"
+    folder_path = f"images/{clean_profile_name}"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     
