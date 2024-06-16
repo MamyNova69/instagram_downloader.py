@@ -25,7 +25,7 @@ instagram_url = "https://www.instagram.com/"
 instagram_cookie_url =".instagram.com"
 
 # img_pattern = r'src="(https:\/\/scontent.cdninstagram.com\/v\/.*?)"'
-img_pattern = r'src="(https:\/\/scontent-cdg4-2.cdninstagram.com\/v\/.*?)"'
+img_pattern = r'src="(https:\/\/scontent-cdg\d-\d.cdninstagram.com\/v\/.*?)"'
 count_image = 0
 IMG_URLS = []
 
